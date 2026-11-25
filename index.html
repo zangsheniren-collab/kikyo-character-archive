@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101d2b">
+  <title>KIKYO CHARACTER ARCHIVE</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark">K</div>
+        <div><strong>KIKYO</strong><small>CHARACTER ARCHIVE</small></div>
+      </div>
+      <div class="side-caption">ARCHIVE MENU</div>
+      <button class="nav-item active" data-view="dashboard"><span>▦</span> ダッシュボード</button>
+      <button class="nav-item" data-view="characters"><span>▤</span> 登録キャラクター</button>
+      <button class="nav-item" data-view="register"><span>＋</span> 新規カルテ作成</button>
+      <div class="sidebar-bottom">
+        <div class="status-dot"></div>
+        <div><strong>LOCAL ARCHIVE</strong><small>この端末に保存中</small></div>
+      </div>
+    </aside>
+
+    <main class="main-area">
+      <header class="topbar">
+        <div class="breadcrumb">KIKYO / <span id="crumb">DASHBOARD</span></div>
+        <div class="top-actions">
+          <button class="icon-button" id="soundToggle" title="効果音の切り替え" aria-label="効果音の切り替え">♫</button>
+          <button class="outline-button" id="backupButton">バックアップ</button>
+        </div>
+      </header>
+
+      <section class="view active" id="dashboardView">
+        <div class="page-heading">
+          <div><p class="eyebrow">ARCHIVE OVERVIEW</p><h1>管理ダッシュボード</h1><p class="muted">登録されたキャラクター情報を一元管理します。</p></div>
+          <button class="primary-button" data-go="register">＋ 新規カルテを作成</button>
+        </div>
+        <div class="stats-grid">
+          <article class="stat-card"><span>登録カルテ数</span><strong id="totalCount">0</strong><small>CHARACTER RECORDS</small></article>
+          <article class="stat-card"><span>画像データ数</span><strong id="imageCount">0</strong><small>IMAGE FILES</small></article>
+          <article class="stat-card"><span>カスタム項目</span><strong id="customCount">0</strong><small>CUSTOM FIELDS</small></article>
+        </div>
+        <div class="panel">
+          <div class="panel-heading"><div><p class="eyebrow">QUICK ACCESS</p><h2>最近更新したカルテ</h2></div><button class="text-button" data-go="characters">一覧を見る →</button></div>
+          <div id="recentList" class="record-list empty-state">まだキャラクターが登録されていません。</div>
+        </div>
+        <div class="notice"><strong>PRIVATE STORAGE</strong><p>この初期版では、キャラクター情報はこのブラウザ内に保存されます。GitHub上に個人データが公開されることはありません。端末変更やブラウザデータ削除に備え、定期的にバックアップしてください。</p></div>
+      </section>
+
+      <section class="view" id="charactersView">
+        <div class="page-heading">
+          <div><p class="eyebrow">PATIENT RECORDS</p><h1>キャラクターカルテ一覧</h1><p class="muted">名前・プロフィール・能力・自由項目を横断検索できます。</p></div>
+          <button class="primary-button" data-go="register">＋ 新規カルテ</button>
+        </div>
+        <div class="search-panel panel">
+          <div class="search-row">
+            <input id="searchInput" type="search" placeholder="キーワード検索（例：花、雷、冷静）">
+            <select id="searchField" aria-label="検索対象"><option value="all">すべての項目</option><option value="name">名前</option><option value="basic">基本情報</option><option value="personality">性格</option><option value="ability">能力</option><option value="custom">カスタム項目</option></select>
+          </div>
+          <div class="search-foot"><span id="resultCount">0件</span><button class="text-button" id="clearSearch">検索をクリア</button></div>
+        </div>
+        <div id="characterGrid" class="character-grid empty-state">登録データがありません。</div>
+      </section>
+
+      <section class="view" id="registerView">
+        <div class="page-heading">
+          <div><p class="eyebrow">NEW MEDICAL RECORD</p><h1 id="formTitle">新規カルテ作成</h1><p class="muted">必要な項目を入力してください。空欄の項目は保存時に省略できます。</p></div>
+          <button class="text-button" data-go="characters">← 一覧に戻る</button>
+        </div>
+        <form id="characterForm" class="panel form-panel">
+          <input type="hidden" id="editingId">
+          <div class="form-section">
+            <div class="section-title"><span>01</span><div><h2>基本情報</h2><p>IDENTIFICATION</p></div></div>
+            <div class="form-grid">
+              <label class="field wide">キャラクター名 <b>*</b><input id="name" required maxlength="100" placeholder="例：花森 鈴音"></label>
+              <label class="field">性別<input id="gender" placeholder="例：女性 / 不明"></label>
+              <label class="field">年齢<input id="age" placeholder="例：17歳"></label>
+              <label class="field">身長<input id="height" placeholder="例：165cm"></label>
+              <label class="field">体重<input id="weight" placeholder="例：49kg"></label>
+              <label class="field">所属・組織<input id="affiliation" placeholder="例：祈京医療局"></label>
+              <label class="field">種族<input id="species" placeholder="例：人間"></label>
+              <label class="field wide">概要<textarea id="summary" rows="3" placeholder="キャラクターの概要・設定の要約"></textarea></label>
+            </div>
+          </div>
+          <div class="form-section">
+            <div class="section-title"><span>02</span><div><h2>人物設定</h2><p>PERSONALITY & BACKGROUND</p></div></div>
+            <div class="form-grid">
+              <label class="field wide">性格<textarea id="personality" rows="4" placeholder="性格、価値観、癖、人間関係など"></textarea></label>
+              <label class="field wide">過去・経歴<textarea id="background" rows="4" placeholder="生い立ち、過去、現在までの経歴"></textarea></label>
+              <label class="field wide">備考<textarea id="notes" rows="3" placeholder="その他の設定・メモ"></textarea></label>
+            </div>
+          </div>
+          <div class="form-section">
+            <div class="section-title"><span>03</span><div><h2>能力・スキル</h2><p>ABILITY DATA</p></div></div>
+            <div class="form-grid">
+              <label class="field wide">能力名<input id="abilityName" placeholder="例：雷光駆動"></label>
+              <label class="field wide">能力詳細<textarea id="ability" rows="5" placeholder="能力の効果、発動条件、制約、弱点など"></textarea></label>
+              <label class="field wide">武器・装備<textarea id="equipment" rows="3" placeholder="武器、道具、装備品"></textarea></label>
+            </div>
+          </div>
+          <div class="form-section">
+            <div class="section-title"><span>04</span><div><h2>画像資料</h2><p>IMAGE ARCHIVE</p></div></div>
+            <label class="field">画像を追加（複数選択可）<input id="images" type="file" accept="image/*" multiple><small>画像はこのブラウザのIndexedDBに保存します。大きな画像を大量に登録すると端末容量を使用します。</small></label>
+            <div id="existingImages" class="image-preview-grid"></div>
+          </div>
+          <div class="form-section">
+            <div class="section-title"><span>05</span><div><h2>自由項目</h2><p>CUSTOM FIELDS</p></div></div>
+            <p class="muted small">独自の項目を追加できます。追加した項目も検索対象になります。</p>
+            <div id="customFields"></div>
+            <button type="button" class="secondary-button" id="addCustomField">＋ カスタム項目を追加</button>
+          </div>
+          <div class="form-actions"><button type="button" class="outline-button" data-go="characters">キャンセル</button><button type="submit" class="primary-button">カルテを保存</button></div>
+        </form>
+      </section>
+
+      <section class="view" id="detailView">
+        <div class="page-heading">
+          <div><p class="eyebrow">MEDICAL RECORD / DETAIL</p><h1>カルテ詳細</h1><p class="muted" id="detailId"></p></div>
+          <div class="heading-buttons"><button class="outline-button" id="editCharacter">編集</button><button class="danger-button" id="deleteCharacter">削除</button></div>
+        </div>
+        <div id="detailContent"></div>
+      </section>
+      <footer> KIKYO CHARACTER ARCHIVE <span>PERSONAL RECORD MANAGEMENT SYSTEM</span></footer>
+    </main>
+  </div>
+  <input type="file" id="restoreInput" accept="application/json,.json" hidden>
+  <div id="toast" class="toast" role="status"></div>
+  <script src="script.js"></script>
+</body>
+</html>
